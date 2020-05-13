@@ -8,7 +8,7 @@ function createCard(options) {
     const $card = document.createElement('div')
     $card.classList.add('col-4')
     $card.insertAdjacentHTML('afterbegin', `
-        <div class="card" id="${options.id}">
+        <div class="card" id="card-${options.id}">
             <img src="${options.img}" class="card-img-top" alt="${options.title}">
             <div class="card-body">
                 <h5 class="card-title">${options.title}</h5>
@@ -29,7 +29,14 @@ function createCard(options) {
     const $btnRemove = $card.querySelector('[data-btn-remove]')
     $btnRemove.addEventListener('click', event => {
         event.preventDefault()
-        $card.remove()
+        $.confirm({
+            title: 'Delete product',
+            content: `<div class="my-3">Delete the ${options.title} card?</b></div>`,
+            width: '300px',
+        }).then(() => {
+            const $cardId = $card.querySelector(`#card-${options.id}`)
+            $cardId.parentElement.remove()
+        })
     })
 
     document.querySelector('[data-card-list]').appendChild($card)
