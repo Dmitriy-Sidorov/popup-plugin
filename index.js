@@ -13,7 +13,7 @@ function createCard(options) {
             <div class="card-body">
                 <h5 class="card-title">${options.title}</h5>
                 <a href="#" class="btn btn-primary" data-btn-price>Price show</a>
-                <a href="#" class="btn btn-danger">Remove</a>
+                <a href="#" class="btn btn-danger" data-btn-remove>Remove</a>
             </div>
         </div>`)
 
@@ -24,6 +24,12 @@ function createCard(options) {
             <div class="my-3">Price of ${options.title}: <b>$${options.price}</b></div>
         `)
         modalPrice.open()
+    })
+
+    const $btnRemove = $card.querySelector('[data-btn-remove]')
+    $btnRemove.addEventListener('click', event => {
+        event.preventDefault()
+        $card.remove()
     })
 
     document.querySelector('[data-card-list]').appendChild($card)
