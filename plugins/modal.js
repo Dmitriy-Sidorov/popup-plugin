@@ -1,7 +1,36 @@
+Element.prototype.appendAfter = function (element) {
+    element.parentNode.insertBefore(this, element.nextSibling)
+}
+
+function noop() {
+}
+
+function _createModalFooter(buttons = []) {
+    if (buttons.length === 0) {
+        return document.createElement('div')
+    }
+
+    const $footer = document.createElement('div')
+    $footer.classList.add('modal-footer')
+
+    buttons.forEach(btn => {
+        const $btn = document.createElement('button')
+        $btn.textContent = btn.text || 'Unknown'
+        btn.css.split(' ').forEach(css => {
+            $btn.classList.add(css || '')
+        })
+        $btn.onclick = btn.handler || noop
+
+        $footer.appendChild($btn)
+    })
+
+    return $footer;
+}
+
 function _createModal(options = {}) {
-    const modal = document.createElement('div')
-    modal.classList.add('custom-modal')
-    modal.insertAdjacentHTML('afterbegin', `
+    const $modal = document.createElement('div')
+    $modal.classList.add('custom-modal')
+    $modal.insertAdjacentHTML('afterbegin', `
     <div class="modal-overlay" data-close-event="true">
         <div class="modal-window" style="width: ${options.width || '600px'}">
             <div class="modal-header">
@@ -11,14 +40,14 @@ function _createModal(options = {}) {
             <div class="modal-body" data-content-modal-body>
                 ${options.content || ''}
             </div>
-            <div class="modal-footer">
-                <button class="btn">Ok</button>
-                <button class="btn">Cancel</button>
-            </div>
         </div>
     </div>`)
 
-    return modal
+    const $modalFooter = _createModalFooter(options.footerButtons || [])
+
+    $modalFooter.appendAfter($modal.querySelector('[data-content-modal-body]'))
+
+    return $modal
 }
 
 $.modal = function (options) {
