@@ -8,7 +8,7 @@ function _createModal(options = {}) {
                 <span class="modal-title">${options.title || 'Окно'}</span>
                 ${options.closable ? `<span data-close-event="true" class="modal-close">&times;</span>` : ``}
             </div>
-            <div class="modal-body">
+            <div class="modal-body" data-content-modal-body>
                 ${options.content || ''}
             </div>
             <div class="modal-footer">
@@ -53,7 +53,7 @@ $.modal = function (options) {
 
     return Object.assign(modal, {
         setContent(html) {
-
+            $modal.querySelector('[data-content-modal-body]').innerHTML = html
         }
     })
 }
