@@ -9,39 +9,38 @@ function createCard(options) {
     $card.classList.add('col-4')
     $card.insertAdjacentHTML('afterbegin', `
         <div class="card" id="${options.id}">
-            <img src="${options.img}" class="card-img-top">
+            <img src="${options.img}" class="card-img-top" alt="${options.title}">
             <div class="card-body">
                 <h5 class="card-title">${options.title}</h5>
-                <a href="#" class="btn btn-primary">Price show</a>
+                <a href="#" class="btn btn-primary" data-btn-price>Price show</a>
                 <a href="#" class="btn btn-danger">Remove</a>
             </div>
         </div>`)
+
+    const $btnPrice = $card.querySelector('[data-btn-price]')
+    $btnPrice.addEventListener('click', event => {
+        event.preventDefault()
+        modalPrice.setContent(`
+            <div class="my-3">Price of ${options.title}: <b>$${options.price}</b></div>
+        `)
+        modalPrice.open()
+    })
 
     document.querySelector('[data-card-list]').appendChild($card)
 }
 
 fruits.forEach(card => createCard(card));
 
-const modal = $.modal({
+const modalPrice = $.modal({
+    title: 'Price product',
     closable: true,
-    content: `
-    <h2>Lorem ipsum.</h2>
-    <p>Lorem ipsum dolor sit amet.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil.</p>
-    `,
+    width: '300px',
     footerButtons: [
         {
-            text: 'Ok',
+            text: 'Close',
             css: 'btn btn-primary',
             handler() {
-                console.log('Primary click')
-            }
-        },
-        {
-            text: 'Cancel',
-            css: 'btn btn-danger',
-            handler() {
-                console.log('Danger click')
+                modalPrice.close()
             }
         }
     ]
